@@ -1,0 +1,13 @@
+
+# Python envs
+venv/
+venv.nosync/
+__pycache__/
+*.pyc
+
+# Local cache & logs
+.DS_Store
+.streamlit/
+!.streamlit/config.toml
+*.log
+*.db
