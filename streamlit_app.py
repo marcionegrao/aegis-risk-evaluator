@@ -150,11 +150,15 @@ def load_models_and_scalers():
     
     df_seq['Status'] = df_seq['CIK_int'].apply(lambda x: 'Bankrupt' if x in distressed_ciks else 'Healthy')
     
-    return model, clf, scaler, pca, df_coords, df_scores, distressed_ciks, z_cols, df_seq, pca_seq
+    # Load Aegis Three Scores
+    df_aegis = pd.read_csv(os.path.join(base_dir, "aegis_three_scores.csv"))
+    df_aegis['CIK_int'] = df_aegis['CIK'].astype(int)
+    
+    return model, clf, scaler, pca, df_coords, df_scores, distressed_ciks, z_cols, df_seq, pca_seq, df_aegis
 
 # Load resources
 try:
-    model, clf, scaler, pca, df_coords, df_scores, distressed_ciks, z_cols, df_seq, pca_seq = load_models_and_scalers()
+    model, clf, scaler, pca, df_coords, df_scores, distressed_ciks, z_cols, df_seq, pca_seq, df_aegis = load_models_and_scalers()
 except Exception as e:
     st.error(f"Error loading models or files: {str(e)}")
     st.stop()
@@ -403,67 +407,131 @@ elif page == "2. Sequential Multi-Modal Space (Dual-Tower)":
         
     st.plotly_chart(fig_seq, use_container_width=True)
 
-    # Display Metrics and Trajectory Analysis
-    st.subheader(f"📊 Trajectory Alignment Log: {selected_seq_company}")
+    # ---------------------------------------------------------
+    # DISPLAY METRICS AND THREE-SCORE ANALYSIS
+    # ---------------------------------------------------------
+    st.subheader(f"📊 Aegis Three-Score Diagnostics: {selected_seq_company}")
     
-    # Calculate YoY similarity metrics and distance metrics
-    yoy_data = []
-    for i in range(len(target_seq)):
-        row = target_seq.iloc[i]
-        year = row['Filing_Year_End']
-        sim = row['Alignment_Similarity']
-        
-        # Calculate Euclidean distance between ZF and ZT
-        zf_v = row[[f'ZF{k}' for k in range(1, 17)]].values.astype(float)
-        zt_v = row[[f'ZT{k}' for k in range(1, 17)]].values.astype(float)
-        latent_dist = np.linalg.norm(zf_v - zt_v)
-        
-        yoy_data.append({
-            'Filing Year': year,
-            'Narrative-to-Financial Similarity': f"{sim:.4f}",
-            'Latent Gap (Euclidean)': f"{latent_dist:.4f}"
-        })
+    # Filter the Aegis Scores for our selected company
+    company_aegis = df_aegis[df_aegis['CIK_int'] == selected_seq_cik].sort_values('Filing_Year_End')
     
-    st.table(pd.DataFrame(yoy_data))
-
-    # Anomaly/Divergence Warning Box
-    st.subheader("🛡️ Aegis Divergence & Anomaly Detection")
-    
-    divergence_found = False
-    warning_msgs = []
-    
-    # Calculate transitions
-    for i in range(1, len(target_seq)):
-        row_prev = target_seq.iloc[i-1]
-        row_curr = target_seq.iloc[i]
+    if len(company_aegis) > 0:
+        # We can display a high-tech dashboard overview table
+        table_df = company_aegis[[
+            'Filing_Year_End', 'Score_1_Fin', 'Score_1_Text', 
+            'Score_2_Fin_Velocity', 'Score_2_Fin_Directional',
+            'Score_3_Decoupling_Distance', 'Score_3_Signed_Divergence'
+        ]].copy()
         
-        sim_prev = row_prev['Alignment_Similarity']
-        sim_curr = row_curr['Alignment_Similarity']
-        sim_change = sim_curr - sim_prev
+        table_df.columns = [
+            'Filing Year', 'Score 1: Fin Position', 'Score 1: Text Position',
+            'Score 2: Fin Velocity', 'Score 2: Fin Direction',
+            'Score 3: Latent Gap', 'Score 3: Signed Divergence'
+        ]
         
-        zf_prev = row_prev[[f'ZF{k}' for k in range(1, 17)]].values.astype(float)
-        zf_curr = row_curr[[f'ZF{k}' for k in range(1, 17)]].values.astype(float)
-        fin_dist = np.linalg.norm(zf_curr - zf_prev)
+        st.dataframe(table_df.set_index('Filing Year').style.format({
+            'Score 1: Fin Position': '{:+.4f}',
+            'Score 1: Text Position': '{:+.4f}',
+            'Score 2: Fin Velocity': '{:.4f}',
+            'Score 2: Fin Direction': '{:+.4f}',
+            'Score 3: Latent Gap': '{:.4f}',
+            'Score 3: Signed Divergence': '{:+.4f}'
+        }), use_container_width=True)
         
-        if sim_curr < 0.60:
-            divergence_found = True
-            warning_msgs.append(f"⚠️ **Low Multi-Modal Alignment ({row_curr['Filing_Year_End']}):** Narrative and numbers are severely misaligned (Similarity: {sim_curr:.4f}). This indicates standard financial ratios have decoupled from historical executive text representations.")
+        st.markdown("### 🔬 Year-Specific Deep Dive")
+        selected_year = st.selectbox("Select Diagnostic Year", company_aegis['Filing_Year_End'].tolist())
+        
+        year_row = company_aegis[company_aegis['Filing_Year_End'] == selected_year].iloc[0]
+        
+        s1_fin = year_row['Score_1_Fin']
+        s1_text = year_row['Score_1_Text']
+        s2_vel = year_row['Score_2_Fin_Velocity']
+        s2_dir = year_row['Score_2_Fin_Directional']
+        s3_gap = year_row['Score_3_Decoupling_Distance']
+        s3_div = year_row['Score_3_Signed_Divergence']
+        
+        col_s1, col_s2, col_s3 = st.columns(3)
+        
+        with col_s1:
+            st.markdown(f"""
+            <div style='background-color:#0b0c10; border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; height: 260px; text-align: center;'>
+                <h4 style='color:#bd93f9; margin-top:0;'>SCORE 1: LATENT POSITION</h4>
+                <p style='font-size: 0.85rem; color:#9ca3af;'>Spectrum of Health (-1.0 to +1.0)</p>
+                <div style='display: flex; justify-content: space-around; margin-top:20px;'>
+                    <div>
+                        <span style='font-size:0.8rem; color:#8be9fd;'>Financial (ZF)</span>
+                        <div style='font-size: 1.8rem; font-weight:800; color:{"#ef4444" if s1_fin < -0.1 else "#10b981" if s1_fin > 0.1 else "#f59e0b"};'>{s1_fin:+.4f}</div>
+                    </div>
+                    <div>
+                        <span style='font-size:0.8rem; color:#ff79c6;'>Textual (ZT)</span>
+                        <div style='font-size: 1.8rem; font-weight:800; color:{"#ef4444" if s1_text < -0.1 else "#10b981" if s1_text > 0.1 else "#f59e0b"};'>{s1_text:+.4f}</div>
+                    </div>
+                </div>
+                <div style='margin-top: 15px; font-size: 0.85rem;'>
+                    <span>Position Status: </span>
+                    <b>{"🟢 HEALTHY" if s1_fin > 0.1 else "🔴 CRITICAL DISTRESS" if s1_fin < -0.1 else "🟡 TRANSITION ZONE"}</b>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
             
-        if sim_change < -0.30:
-            divergence_found = True
-            warning_msgs.append(f"🚨 **Severe YoY Decoupling ({row_prev['Filing_Year_End']} ➔ {row_curr['Filing_Year_End']}):** Cosine similarity dropped by {sim_change:.4f} YoY! Something changed dramatically in the balance sheet that management's report did not fully match.")
+        with col_s2:
+            st.markdown(f"""
+            <div style='background-color:#0b0c10; border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; height: 260px; text-align: center;'>
+                <h4 style='color:#ffb86c; margin-top:0;'>SCORE 2: YoY MOMENTUM</h4>
+                <p style='font-size: 0.85rem; color:#9ca3af;'>Velocity & Trajectory Change</p>
+                <div style='display: flex; justify-content: space-around; margin-top:20px;'>
+                    <div>
+                        <span style='font-size:0.8rem; color:#8be9fd;'>Speed (16D Norm)</span>
+                        <div style='font-size: 1.8rem; font-weight:800; color:#ffb86c;'>{s2_vel:.4f}</div>
+                    </div>
+                    <div>
+                        <span style='font-size:0.8rem; color:#ff79c6;'>Direction (Trend)</span>
+                        <div style='font-size: 1.8rem; font-weight:800; color:{"#10b981" if s2_dir > 0.1 else "#ef4444" if s2_dir < -0.1 else "#9ca3af"};'>{s2_dir:+.4f}</div>
+                    </div>
+                </div>
+                <div style='margin-top: 15px; font-size: 0.85rem;'>
+                    <span>Momentum Status: </span>
+                    <b>{"🟢 IMPROVING" if s2_dir > 0.1 else "🔴 DECAYING" if s2_dir < -0.1 else "⚪ STABLE"}</b>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
             
-        if fin_dist > 0.8:
-            divergence_found = True
-            warning_msgs.append(f"⚡ **Large Financial Trajectory Jump ({row_prev['Filing_Year_End']} ➔ {row_curr['Filing_Year_End']}):** Company shifted drastically in the financial latent space (YoY Distance: {fin_dist:.4f}). This denotes a severe change in corporate structure, liquidity, or solvency.")
-
-    if divergence_found:
-        st.error("### 🛑 Multi-Modal Anomalies / Early Warnings Detected")
-        for msg in warning_msgs:
-            st.write(msg)
-    else:
-        st.success("### ✅ Multi-Modal Integrity Intact")
-        st.write("No anomalous decoupling or sudden latent jumps detected. The financial numbers and verbal MD&A narratives are moving symmetrically through the 16D distress space, showing stable alignment.")
+        with col_s3:
+            st.markdown(f"""
+            <div style='background-color:#0b0c10; border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; height: 260px; text-align: center;'>
+                <h4 style='color:#8be9fd; margin-top:0;'>SCORE 3: DECOUPLING</h4>
+                <p style='font-size: 0.85rem; color:#9ca3af;'>Multi-Modal Vector Alignment</p>
+                <div style='display: flex; justify-content: space-around; margin-top:20px;'>
+                    <div>
+                        <span style='font-size:0.8rem; color:#8be9fd;'>Latent Gap</span>
+                        <div style='font-size: 1.8rem; font-weight:800; color:#bd93f9;'>{s3_gap:.4f}</div>
+                    </div>
+                    <div>
+                        <span style='font-size:0.8rem; color:#ff79c6;'>Signed Div.</span>
+                        <div style='font-size: 1.8rem; font-weight:800; color:{"#ef4444" if abs(s3_div) > 0.3 else "#f59e0b" if abs(s3_div) > 0.15 else "#10b981"};'>{s3_div:+.4f}</div>
+                    </div>
+                </div>
+                <div style='margin-top: 15px; font-size: 0.85rem;'>
+                    <span>Alignment: </span>
+                    <b>{"🚨 CRITICAL MISALIGNMENT" if abs(s3_div) > 0.3 else "⚠️ MODERATE MISALIGNMENT" if abs(s3_div) > 0.15 else "✅ SYMMETRIC"}</b>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        # Sophisticated multi-dimensional interpretation of decoupling
+        st.markdown("<br>", unsafe_allow_html=True)
+        if abs(s3_div) <= 0.15:
+            st.success(f"### ✅ **Symmetric Multi-Modal Integrity Intact**\n**Interpretation:** Aligned (Narrative and financials are in harmony). Management's reports and alternative operational metrics perfectly match the hard financial numbers (Signed Divergence: {s3_div:+.4f}).")
+        elif s3_div > 0.15:
+            if s1_fin > 0 and s1_text < 0:
+                st.warning(f"### ⚠️ **CRITICAL NEGATIVE DIVERGENCE (Smoke Signal)**\n**Interpretation:** Financials look healthy ({s1_fin:+.4f}), but operational/text metrics are in distress ({s1_text:+.4f})! This indicates standard trailing financial metrics look stable, but real-time narrative or alternative indicators are deteriorating rapidly. This is a primary early warning indicator!")
+            else:
+                st.warning(f"### ⚠️ **NEGATIVE DIVERGENCE**\n**Interpretation:** Financial metrics are outpacing operational/narrative metrics. The balance sheet numbers have expanded faster than narrative-based context has caught up (Signed Divergence: {s3_div:+.4f}).")
+        else: # s3_div < -0.15
+            if s1_fin < 0 and s1_text > 0:
+                st.error(f"### 🚨 **SEVERE DECOUPLING / NARRATIVE DISCONNECT**\n**Interpretation:** Financial statements are in deep distress ({s1_fin:+.4f}), but operational narrative remains highly optimistic or lagging ({s1_text:+.4f})! This indicates the corporate books are in the gutter, but management's report or alternative data hasn't acknowledged it yet (Signed Divergence: {s3_div:+.4f}). This is a classic indicator of executive over-optimism or reporting lag.")
+            else:
+                st.info(f"### 🟢 **POSITIVE DIVERGENCE (Turnaround Signal)**\n**Interpretation:** Operational/narrative metrics are improving ahead of trailing financial statements. Qualitative improvements or leading alternative indicators (hiring, bill payment, traffic) are turning around before the trailing 12-month financials reflect recovery (Signed Divergence: {s3_div:+.4f}). This is an early-stage turnaround indicator!")
 
     # --- 🛡️ AEGIS EXPLAINABLE AI (XAI) LATENT INTERPRETER ---
     try:
