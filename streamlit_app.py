@@ -32,7 +32,7 @@ st.markdown("""
     }
     .sub-header {
         font-size: 1.15rem;
-        color: #9CA3AF; /* Muted gray subhead */
+        color: #E5E7EB; /* High-contrast silver subhead */
         text-align: center;
         margin-bottom: 2.5rem;
         letter-spacing: 0.04em;
@@ -161,7 +161,7 @@ st.markdown("""
         Instead of relying on outdated 1960s linear formulas (like the Altman Z-score), Aegis utilizes an unsupervised, deep PyTorch parallel <b>Dual-Tower LSTM architecture</b>.
         It maps 3-year sequential financial ratios (Financial Tower) and corresponding 10-K qualitative risk narratives (Textual Tower) into the <b>exact same 16-dimensional joint latent space</b>.
     </p>
-    <p style='color: #9CA3AF; font-size: 0.95rem; margin-bottom: 0;'>
+    <p style='color: #E5E7EB; font-size: 0.95rem; margin-bottom: 0;'>
         💡 <b>How to interact:</b> Choose a curated company profile below to watch how its actual financials (yellow path) and management narrative disclosures (blue path) move relative to each other over consecutive years in high-dimensional space.
     </p>
 </div>
@@ -409,7 +409,7 @@ if len(company_aegis) > 0:
         
     with col_chart2:
         st.markdown("<h5 style='text-align: center; color: #8be9fd; margin-bottom: 10px;'>Signed Divergence Gap (Score 3)</h5>", unsafe_allow_html=True)
-        div_colors = ['#ef4444' if val < -0.15 else '#10b981' if val > 0.15 else '#9ca3af' for val in company_aegis['Score_3_Signed_Divergence']]
+        div_colors = ['#ef4444' if val < -0.15 else '#10b981' if val > 0.15 else '#8F9CAE' for val in company_aegis['Score_3_Signed_Divergence']]
         fig_div = go.Figure()
         fig_div.add_trace(go.Bar(
             x=company_aegis['Filing_Year_End'],
@@ -457,7 +457,7 @@ if len(company_aegis) > 0:
         st.markdown(f"""
         <div style='background-color:#0b0c10; border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; height: 260px; text-align: center;'>
             <h4 style='color:#bd93f9; margin-top:0;'>SCORE 1: LATENT POSITION</h4>
-            <p style='font-size: 0.85rem; color:#9ca3af;'>Spectrum of Health (-1.0 to +1.0)</p>
+            <p style='font-size: 0.85rem; color:#E5E7EB;'>Spectrum of Health (-1.0 to +1.0)</p>
             <div style='display: flex; justify-content: space-around; margin-top:20px;'>
                 <div>
                     <span style='font-size:0.8rem; color:#8be9fd;'>Financial (ZF)</span>
@@ -468,7 +468,7 @@ if len(company_aegis) > 0:
                     <div style='font-size: 1.8rem; font-weight:800; color:{"#ef4444" if s1_text < -0.1 else "#10b981" if s1_text > 0.1 else "#f59e0b"};'>{s1_text:+.4f}</div>
                 </div>
             </div>
-            <div style='margin-top: 15px; font-size: 0.85rem;'>
+            <div style='margin-top: 15px; font-size: 0.85rem; color:#E5E7EB;'>
                 <span>Position Status: </span>
                 <b>{"🟢 HEALTHY" if s1_fin > 0.1 else "🔴 CRITICAL DISTRESS" if s1_fin < -0.1 else "🟡 TRANSITION ZONE"}</b>
             </div>
@@ -479,7 +479,7 @@ if len(company_aegis) > 0:
         st.markdown(f"""
         <div style='background-color:#0b0c10; border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; height: 260px; text-align: center;'>
             <h4 style='color:#ffb86c; margin-top:0;'>SCORE 2: YoY MOMENTUM</h4>
-            <p style='font-size: 0.85rem; color:#9ca3af;'>Velocity & Trajectory Change</p>
+            <p style='font-size: 0.85rem; color:#E5E7EB;'>Velocity & Trajectory Change</p>
             <div style='display: flex; justify-content: space-around; margin-top:20px;'>
                 <div>
                     <span style='font-size:0.8rem; color:#8be9fd;'>Speed (16D Norm)</span>
@@ -487,10 +487,10 @@ if len(company_aegis) > 0:
                 </div>
                 <div>
                     <span style='font-size:0.8rem; color:#ff79c6;'>Direction (Trend)</span>
-                    <div style='font-size: 1.8rem; font-weight:800; color:{"#10b981" if s2_dir > 0.1 else "#ef4444" if s2_dir < -0.1 else "#9ca3af"};'>{s2_dir:+.4f}</div>
+                    <div style='font-size: 1.8rem; font-weight:800; color:{"#10b981" if s2_dir > 0.1 else "#ef4444" if s2_dir < -0.1 else "#E5E7EB"};'>{s2_dir:+.4f}</div>
                 </div>
             </div>
-            <div style='margin-top: 15px; font-size: 0.85rem;'>
+            <div style='margin-top: 15px; font-size: 0.85rem; color:#E5E7EB;'>
                 <span>Momentum Status: </span>
                 <b>{"🟢 IMPROVING" if s2_dir > 0.1 else "🔴 DECAYING" if s2_dir < -0.1 else "⚪ STABLE"}</b>
             </div>
@@ -501,7 +501,7 @@ if len(company_aegis) > 0:
         st.markdown(f"""
         <div style='background-color:#0b0c10; border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; height: 260px; text-align: center;'>
             <h4 style='color:#8be9fd; margin-top:0;'>SCORE 3: DECOUPLING</h4>
-            <p style='font-size: 0.85rem; color:#9ca3af;'>Multi-Modal Vector Alignment</p>
+            <p style='font-size: 0.85rem; color:#E5E7EB;'>Multi-Modal Vector Alignment</p>
             <div style='display: flex; justify-content: space-around; margin-top:20px;'>
                 <div>
                     <span style='font-size:0.8rem; color:#8be9fd;'>Latent Gap</span>
@@ -512,7 +512,7 @@ if len(company_aegis) > 0:
                     <div style='font-size: 1.8rem; font-weight:800; color:{"#ef4444" if abs(s3_div) > 0.3 else "#f59e0b" if abs(s3_div) > 0.15 else "#10b981"};'>{s3_div:+.4f}</div>
                 </div>
             </div>
-            <div style='margin-top: 15px; font-size: 0.85rem;'>
+            <div style='margin-top: 15px; font-size: 0.85rem; color:#E5E7EB;'>
                 <span>Alignment: </span>
                 <b>{"🚨 CRITICAL MISALIGNMENT" if abs(s3_div) > 0.3 else "⚠️ MODERATE MISALIGNMENT" if abs(s3_div) > 0.15 else "✅ SYMMETRIC"}</b>
             </div>
