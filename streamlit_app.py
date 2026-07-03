@@ -21,18 +21,94 @@ st.markdown("""
     /* Premium Pure Black Theme Override */
     .stApp {
         background: #000000 !important;
+        color: #F3F4F6 !important;
     }
+    
+    /* Force high contrast white for all default headings */
+    h1, h2, h3, h4, h5, h6, 
+    .stSubheader, .stHeader, 
+    [data-testid="stHeader"] h2, [data-testid="stHeader"] h3,
+    div[data-testid="stMarkdownContainer"] h1,
+    div[data-testid="stMarkdownContainer"] h2,
+    div[data-testid="stMarkdownContainer"] h3,
+    div[data-testid="stMarkdownContainer"] h4,
+    div[data-testid="stMarkdownContainer"] h5,
+    div[data-testid="stMarkdownContainer"] h6 {
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Force high contrast silver/off-white for all native Streamlit body text */
+    div[data-testid="stMarkdownContainer"] p, 
+    div[data-testid="stMarkdownContainer"] li,
+    div[data-testid="stMarkdownContainer"] ul,
+    div[data-testid="stMarkdownContainer"] ol,
+    div.stWrite, 
+    div[data-testid="stText"] {
+        color: #F3F4F6 !important; /* Extremely sharp contrast */
+        font-size: 1.05rem !important;
+        line-height: 1.6 !important;
+    }
+    
+    /* Streamlit Selectbox widget labels (e.g., "Choose a High-Profile Corporate Trajectory to Plot") */
+    label, [data-testid="stWidgetLabel"] p, .stSelectbox label {
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        font-size: 1.1rem !important;
+        letter-spacing: 0.02em !important;
+        margin-bottom: 8px !important;
+    }
+    
+    /* Dropdown container input box styling */
+    div[data-baseweb="select"] {
+        background-color: #11131A !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border-radius: 8px !important;
+    }
+    
+    /* Currently selected text inside selectbox */
+    div[data-baseweb="select"] div {
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Selectbox dropdown icons/arrows */
+    div[data-baseweb="select"] svg {
+        fill: #FFFFFF !important;
+    }
+    
+    /* Dropdown portal select box options list */
+    div[role="listbox"], ul[role="listbox"], [data-baseweb="menu"] {
+        background-color: #11131A !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border-radius: 8px !important;
+    }
+    
+    /* Individual option items inside dropdown when open */
+    li[role="option"], [data-baseweb="menu"] li {
+        color: #FFFFFF !important;
+        background-color: #11131A !important;
+        font-weight: 500 !important;
+        font-size: 1.0rem !important;
+    }
+    
+    /* Hover/Focus effect on dropdown options list */
+    li[role="option"]:hover, [data-baseweb="menu"] li:hover {
+        background-color: #8B5CF6 !important; /* Premium Purple accent */
+        color: #FFFFFF !important;
+    }
+
     .main-header {
         font-size: 3.5rem;
         font-weight: 900;
-        color: #FFFFFF;
+        color: #FFFFFF !important;
         text-align: center;
         margin-bottom: 0.1rem;
         letter-spacing: 0.08em;
     }
     .sub-header {
         font-size: 1.15rem;
-        color: #E5E7EB; /* High-contrast silver subhead */
+        color: #E5E7EB !important; /* High-contrast silver subhead */
         text-align: center;
         margin-bottom: 2.5rem;
         letter-spacing: 0.04em;
@@ -48,19 +124,19 @@ st.markdown("""
     .metric-value-healthy {
         font-size: 2.5rem;
         font-weight: 800;
-        color: #10B981; /* Premium Emerald */
+        color: #10B981 !important; /* Premium Emerald */
         letter-spacing: -0.02em;
     }
     .metric-value-distressed {
         font-size: 2.5rem;
         font-weight: 800;
-        color: #EF4444; /* Vivid Crimson */
+        color: #EF4444 !important; /* Vivid Crimson */
         letter-spacing: -0.02em;
     }
     .metric-value-caution {
         font-size: 2.5rem;
         font-weight: 800;
-        color: #F59E0B; /* Warm Amber */
+        color: #F59E0B !important; /* Warm Amber */
         letter-spacing: -0.02em;
     }
     .insight-card {
@@ -456,19 +532,19 @@ if len(company_aegis) > 0:
     with col_s1:
         st.markdown(f"""
         <div style='background-color:#0b0c10; border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; height: 260px; text-align: center;'>
-            <h4 style='color:#bd93f9; margin-top:0;'>SCORE 1: LATENT POSITION</h4>
-            <p style='font-size: 0.85rem; color:#E5E7EB;'>Spectrum of Health (-1.0 to +1.0)</p>
+            <h4 style='color:#bd93f9 !important; margin-top:0;'>SCORE 1: LATENT POSITION</h4>
+            <p style='font-size: 0.85rem; color:#E5E7EB !important;'>Spectrum of Health (-1.0 to +1.0)</p>
             <div style='display: flex; justify-content: space-around; margin-top:20px;'>
                 <div>
-                    <span style='font-size:0.8rem; color:#8be9fd;'>Financial (ZF)</span>
-                    <div style='font-size: 1.8rem; font-weight:800; color:{"#ef4444" if s1_fin < -0.1 else "#10b981" if s1_fin > 0.1 else "#f59e0b"};'>{s1_fin:+.4f}</div>
+                    <span style='font-size:0.8rem; color:#8be9fd !important;'>Financial (ZF)</span>
+                    <div style='font-size: 1.8rem; font-weight:800; color:{"#ef4444" if s1_fin < -0.1 else "#10b981" if s1_fin > 0.1 else "#f59e0b"} !important;'>{s1_fin:+.4f}</div>
                 </div>
                 <div>
-                    <span style='font-size:0.8rem; color:#ff79c6;'>Textual (ZT)</span>
-                    <div style='font-size: 1.8rem; font-weight:800; color:{"#ef4444" if s1_text < -0.1 else "#10b981" if s1_text > 0.1 else "#f59e0b"};'>{s1_text:+.4f}</div>
+                    <span style='font-size:0.8rem; color:#ff79c6 !important;'>Textual (ZT)</span>
+                    <div style='font-size: 1.8rem; font-weight:800; color:{"#ef4444" if s1_text < -0.1 else "#10b981" if s1_text > 0.1 else "#f59e0b"} !important;'>{s1_text:+.4f}</div>
                 </div>
             </div>
-            <div style='margin-top: 15px; font-size: 0.85rem; color:#E5E7EB;'>
+            <div style='margin-top: 15px; font-size: 0.85rem; color:#E5E7EB !important;'>
                 <span>Position Status: </span>
                 <b>{"🟢 HEALTHY" if s1_fin > 0.1 else "🔴 CRITICAL DISTRESS" if s1_fin < -0.1 else "🟡 TRANSITION ZONE"}</b>
             </div>
@@ -478,19 +554,19 @@ if len(company_aegis) > 0:
     with col_s2:
         st.markdown(f"""
         <div style='background-color:#0b0c10; border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; height: 260px; text-align: center;'>
-            <h4 style='color:#ffb86c; margin-top:0;'>SCORE 2: YoY MOMENTUM</h4>
-            <p style='font-size: 0.85rem; color:#E5E7EB;'>Velocity & Trajectory Change</p>
+            <h4 style='color:#ffb86c !important; margin-top:0;'>SCORE 2: YoY MOMENTUM</h4>
+            <p style='font-size: 0.85rem; color:#E5E7EB !important;'>Velocity & Trajectory Change</p>
             <div style='display: flex; justify-content: space-around; margin-top:20px;'>
                 <div>
-                    <span style='font-size:0.8rem; color:#8be9fd;'>Speed (16D Norm)</span>
-                    <div style='font-size: 1.8rem; font-weight:800; color:#ffb86c;'>{s2_vel:.4f}</div>
+                    <span style='font-size:0.8rem; color:#8be9fd !important;'>Speed (16D Norm)</span>
+                    <div style='font-size: 1.8rem; font-weight:800; color:#ffb86c !important;'>{s2_vel:.4f}</div>
                 </div>
                 <div>
-                    <span style='font-size:0.8rem; color:#ff79c6;'>Direction (Trend)</span>
-                    <div style='font-size: 1.8rem; font-weight:800; color:{"#10b981" if s2_dir > 0.1 else "#ef4444" if s2_dir < -0.1 else "#E5E7EB"};'>{s2_dir:+.4f}</div>
+                    <span style='font-size:0.8rem; color:#ff79c6 !important;'>Direction (Trend)</span>
+                    <div style='font-size: 1.8rem; font-weight:800; color:{"#10b981" if s2_dir > 0.1 else "#ef4444" if s2_dir < -0.1 else "#E5E7EB"} !important;'>{s2_dir:+.4f}</div>
                 </div>
             </div>
-            <div style='margin-top: 15px; font-size: 0.85rem; color:#E5E7EB;'>
+            <div style='margin-top: 15px; font-size: 0.85rem; color:#E5E7EB !important;'>
                 <span>Momentum Status: </span>
                 <b>{"🟢 IMPROVING" if s2_dir > 0.1 else "🔴 DECAYING" if s2_dir < -0.1 else "⚪ STABLE"}</b>
             </div>
@@ -500,19 +576,19 @@ if len(company_aegis) > 0:
     with col_s3:
         st.markdown(f"""
         <div style='background-color:#0b0c10; border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; height: 260px; text-align: center;'>
-            <h4 style='color:#8be9fd; margin-top:0;'>SCORE 3: DECOUPLING</h4>
-            <p style='font-size: 0.85rem; color:#E5E7EB;'>Multi-Modal Vector Alignment</p>
+            <h4 style='color:#8be9fd !important; margin-top:0;'>SCORE 3: DECOUPLING</h4>
+            <p style='font-size: 0.85rem; color:#E5E7EB !important;'>Multi-Modal Vector Alignment</p>
             <div style='display: flex; justify-content: space-around; margin-top:20px;'>
                 <div>
-                    <span style='font-size:0.8rem; color:#8be9fd;'>Latent Gap</span>
-                    <div style='font-size: 1.8rem; font-weight:800; color:#bd93f9;'>{s3_gap:.4f}</div>
+                    <span style='font-size:0.8rem; color:#8be9fd !important;'>Latent Gap</span>
+                    <div style='font-size: 1.8rem; font-weight:800; color:#bd93f9 !important;'>{s3_gap:.4f}</div>
                 </div>
                 <div>
-                    <span style='font-size:0.8rem; color:#ff79c6;'>Signed Div.</span>
-                    <div style='font-size: 1.8rem; font-weight:800; color:{"#ef4444" if abs(s3_div) > 0.3 else "#f59e0b" if abs(s3_div) > 0.15 else "#10b981"};'>{s3_div:+.4f}</div>
+                    <span style='font-size:0.8rem; color:#ff79c6 !important;'>Signed Div.</span>
+                    <div style='font-size: 1.8rem; font-weight:800; color:{"#ef4444" if abs(s3_div) > 0.3 else "#f59e0b" if abs(s3_div) > 0.15 else "#10b981"} !important;'>{s3_div:+.4f}</div>
                 </div>
             </div>
-            <div style='margin-top: 15px; font-size: 0.85rem; color:#E5E7EB;'>
+            <div style='margin-top: 15px; font-size: 0.85rem; color:#E5E7EB !important;'>
                 <span>Alignment: </span>
                 <b>{"🚨 CRITICAL MISALIGNMENT" if abs(s3_div) > 0.3 else "⚠️ MODERATE MISALIGNMENT" if abs(s3_div) > 0.15 else "✅ SYMMETRIC"}</b>
             </div>
@@ -576,9 +652,9 @@ if xai_data is not None and len(target_seq) > 0:
                 card_color = "#ef4444" if val < -0.2 else "#10b981" if val > 0.2 else "#f59e0b"
                 st.markdown(f"""
                 <div style='background-color:#11131A; border: 1px solid rgba(255,255,255,0.08); padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 10px;'>
-                    <h4 style='color:#bd93f9; margin-bottom: 5px; margin-top: 0;'>Dimension {dim_num}</h4>
-                    <p style='font-size: 1.8rem; font-weight: 700; color:{card_color}; margin: 0;'>{val:.4f}</p>
-                    <p style='font-size: 0.85rem; color:#8be9fd; margin: 0;'>Active Driver</p>
+                    <h4 style='color:#bd93f9 !important; margin-bottom: 5px; margin-top: 0;'>Dimension {dim_num}</h4>
+                    <p style='font-size: 1.8rem; font-weight: 700; color:{card_color} !important; margin: 0;'>{val:.4f}</p>
+                    <p style='font-size: 0.85rem; color:#8be9fd !important; margin: 0;'>Active Driver</p>
                 </div>
                 """, unsafe_allow_html=True)
                 
