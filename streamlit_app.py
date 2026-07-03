@@ -70,6 +70,39 @@ st.markdown("""
         border-radius: 10px;
         margin-bottom: 20px;
     }
+    .case-guide-card {
+        background-color: #11131A !important;
+        border-left: 5px solid #8B5CF6 !important;
+        padding: 22px !important;
+        border-radius: 8px !important;
+        margin-bottom: 25px !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+    }
+    .case-guide-card h3 {
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        margin-top: 0 !important;
+        margin-bottom: 12px !important;
+    }
+    .case-guide-card p, .case-guide-card div {
+        color: #F3F4F6 !important; /* Extremely high-contrast off-white */
+        font-size: 1.05rem !important;
+        line-height: 1.6 !important;
+    }
+    .case-guide-card ul {
+        margin-top: 8px !important;
+        margin-bottom: 0 !important;
+        padding-left: 20px !important;
+    }
+    .case-guide-card li {
+        color: #F3F4F6 !important; /* Explicitly enforce high-contrast off-white for list items */
+        margin-bottom: 8px !important;
+        font-size: 1.0rem !important;
+        line-height: 1.5 !important;
+    }
+    .case-guide-card li b {
+        color: #FFFFFF !important; /* Pop the bold labels in white */
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -224,9 +257,9 @@ case_guides = {
 # Render Case Guide
 guide = case_guides[selected_company]
 st.markdown(f"""
-<div style='background-color: #0F1115; border-left: 5px solid #8B5CF6; padding: 20px; border-radius: 4px; margin-bottom: 25px;'>
-    <h3 style='color: #FFFFFF; margin-top: 0; margin-bottom: 8px;'>{guide['icon']} {guide['title']}</h3>
-    <p style='color: #D1D5DB; font-size: 1.0rem; line-height: 1.6; margin: 0;'>{guide['desc']}</p>
+<div class='case-guide-card'>
+    <h3>{guide['icon']} {guide['title']}</h3>
+    <div>{guide['desc']}</div>
 </div>
 """, unsafe_allow_html=True)
 
