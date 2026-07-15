@@ -59,42 +59,28 @@ st.markdown("""
         margin-bottom: 8px !important;
     }
     
-    /* Dropdown container input box styling */
-    div[data-baseweb="select"] {
-        background-color: #11131A !important;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
-        border-radius: 8px !important;
-    }
-    
-    /* Currently selected text inside selectbox */
-    div[data-baseweb="select"] div {
+    /* Complete override for Streamlit selectbox options to ensure white text */
+    div[data-baseweb="select"] * {
         color: #FFFFFF !important;
-        font-weight: 600 !important;
     }
     
-    /* Selectbox dropdown icons/arrows */
-    div[data-baseweb="select"] svg {
-        fill: #FFFFFF !important;
-    }
-    
-    /* Dropdown portal select box options list */
-    div[role="listbox"], ul[role="listbox"], [data-baseweb="menu"] {
-        background-color: #11131A !important;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
-        border-radius: 8px !important;
-    }
-    
-    /* Individual option items inside dropdown when open */
-    li[role="option"], [data-baseweb="menu"] li {
+    /* Virtualized list items and option elements inside popovers */
+    [data-baseweb="popover"] li, 
+    [role="option"], 
+    [data-baseweb="menu"] li,
+    [data-baseweb="popover"] * {
         color: #FFFFFF !important;
         background-color: #11131A !important;
-        font-weight: 500 !important;
-        font-size: 1.0rem !important;
     }
     
-    /* Hover/Focus effect on dropdown options list */
-    li[role="option"]:hover, [data-baseweb="menu"] li:hover {
-        background-color: #8B5CF6 !important; /* Premium Purple accent */
+    /* Ensure hover/focus states are highly visible with premium purple background and white text */
+    [data-baseweb="popover"] li:hover,
+    [data-baseweb="popover"] li:hover *,
+    [role="option"]:hover,
+    [role="option"]:hover *,
+    [data-baseweb="menu"] li:hover,
+    [data-baseweb="menu"] li:hover * {
+        background-color: #8B5CF6 !important;
         color: #FFFFFF !important;
     }
 
@@ -231,25 +217,24 @@ st.markdown("<div class='sub-header'>A Multi-Modal, Deep Trajectory Alignment Ar
 # Interactive Intro Description
 st.markdown("""
 <div class='insight-card'>
-    <h3 style='color: #8B5CF6; margin-top: 0;'>🔗 Curated Interactive LinkedIn Demo</h3>
+    <h3 style='color: #8B5CF6; margin-top: 0;'>🔗 Interactive Demo</h3>
     <p style='color: #E5E7EB; font-size: 1.05rem; line-height: 1.6;'>
-        Welcome! This demo showcases <b>Aegis</b>, an enterprise-grade AI risk-evaluator designed to catch corporate credit distress and financial reporting anomalies. 
-        Instead of relying on outdated 1960s linear formulas (like the Altman Z-score), Aegis utilizes an unsupervised, deep PyTorch parallel <b>Dual-Tower LSTM architecture</b>.
-        It maps 3-year sequential financial ratios (Financial Tower) and corresponding 10-K qualitative risk narratives (Textual Tower) into the <b>exact same 16-dimensional joint latent space</b>.
+        Welcome! This interactive dashboard demonstrates the <b>Aegis</b> dual-tower sequence alignment architecture for corporate financial distress prediction. 
+        By mapping rolling 3-year trajectories of quantitative financial ratios (Financial Tower) and qualitative management disclosures (Textual Tower) into a shared 16-dimensional joint latent space, the model identifies structural risk patterns and reporting anomalies without relying on traditional supervised bankruptcy labels.
     </p>
     <p style='color: #E5E7EB; font-size: 0.95rem; margin-bottom: 0;'>
-        💡 <b>How to interact:</b> Choose a curated company profile below to watch how its actual financials (yellow path) and management narrative disclosures (blue path) move relative to each other over consecutive years in high-dimensional space.
+        💡 <b>How to interact:</b> Select a historical company profile below to visualize how its financial trajectory (yellow path) and qualitative management disclosures (blue path) evolved and aligned over consecutive reporting periods.
     </p>
 </div>
 """, unsafe_allow_html=True)
 
 # Curated LinkedIn Demo Case Studies Selection
 demo_cases = {
-    "PARTY CITY HOLDCO INC. (Classic Pandemic Decoupling)": "PARTY CITY HOLDCO INC.",
-    "RITE AID CORP (Chronic Distress & Opioid Liability Decay)": "RITE AID CORP",
-    "CHESAPEAKE ENERGY CORP (Pure Balance-Sheet Collapse)": "CHESAPEAKE ENERGY CORP",
-    "CATALENT, INC. (Wegovy Syringe Factory Crisis & Negative Divergence)": "CATALENT, INC.",
-    "NVIDIA CORP (Symmetric Alignment in Continent of Normalcy)": "NVIDIA CORP"
+    "PARTY CITY HOLDCO INC. (Multi-Modal Decoupling Case)": "PARTY CITY HOLDCO INC.",
+    "RITE AID CORP (Symmetric Distress Case)": "RITE AID CORP",
+    "CHESAPEAKE ENERGY CORP (High-Velocity Distress Case)": "CHESAPEAKE ENERGY CORP",
+    "CATALENT, INC. (Early Warning Narrative Divergence Case)": "CATALENT, INC.",
+    "NVIDIA CORP (Symmetric Healthy Alignment Case)": "NVIDIA CORP"
 }
 
 st.subheader("🏢 Select Curated Case Study")
@@ -263,16 +248,16 @@ selected_cik = seq_companies[seq_companies['Company_Name'] == selected_company][
 # Demo Explanatory Guide Content
 case_guides = {
     "PARTY CITY HOLDCO INC.": {
-        "title": "🚨 SEVERE DECOUPLING ALERT: PARTY CITY HOLDCO INC.",
+        "title": "🚨 SEVERE DECOUPLING: PARTY CITY HOLDCO INC.",
         "icon": "🚨",
         "desc": """
-        <b>The Scenario:</b> Party City carrying high debt faced catastrophic brick-and-mortar store closures during the 2020 COVID-19 lockdowns.
+        <b>The Scenario:</b> Party City, carrying high leverage, faced sudden operational disruption during the 2020 retail lockdowns.
         <br><br>
         <b>The Trajectory Analysis:</b>
         <ul>
-            <li><b>2019 (Aligned Stability):</b> Financials and qualitative narratives are tightly aligned. The Latent Gap is extremely small (0.211), showing that management's narrative is in full consensus with actual financial fundamentals.</li>
-            <li><b>2020 (The Decoupling):</b> When seasonal sales crashed, the company's financial coordinates plummeted into deep distress (Score 1 Financial: <b>-0.9657</b>). However, executive text disclosures remained highly positive and defensive (Score 1 Text: <b>+0.9656</b>).</li>
-            <li><b>Aegis Signal:</b> The Latent Gap exploded to <b>1.5585</b>, triggering a massive <b>🚨 SEVERE DECOUPLING (Score 3)</b> alert, flagging delusional management disclosures or reporting lag 12 months before filing for bankruptcy.</li>
+            <li><b>2019 (Aligned Stability):</b> Financial trajectories and qualitative narrative disclosures were tightly aligned. The Latent Gap was minimal (0.211), indicating that executive commentary closely matched underlying financial metrics.</li>
+            <li><b>2020 (The Decoupling):</b> When operational revenues fell, the financial coordinates shifted deeply into the distressed region (Score 1 Financial: <b>-0.9657</b>). However, qualitative text disclosures remained defensive and highly positive (Score 1 Text: <b>+0.9656</b>).</li>
+            <li><b>Aegis Signal:</b> The Latent Gap expanded to <b>1.5585</b>, triggering a <b>🚨 SEVERE DECOUPLING (Score 3)</b> alert. This indicates a significant reporting-financial disconnect or reporting lag up to 12 months prior to formal restructuring.</li>
         </ul>
         """
     },
@@ -280,12 +265,12 @@ case_guides = {
         "title": "🔴 CHRONIC DISTRESS & SYMMETRIC DECLINE: RITE AID CORP",
         "icon": "🔴",
         "desc": """
-        <b>The Scenario:</b> The legacy drugstore giant was weighed down by massive debt, rising retail competition, and billions in opioid lawsuit liabilities.
+        <b>The Scenario:</b> The legacy drugstore chain faced high debt levels, severe competitive pressure, and significant legal liabilities.
         <br><br>
         <b>The Trajectory Analysis:</b>
         <ul>
-            <li><b>The Path:</b> Unlike sudden shocks, Rite Aid is a textbook case of a chronic decline. Watch both trajectories over consecutive years drift in lockstep toward the distressed region (Cliff Edge).</li>
-            <li><b>Aegis Signal:</b> Score 1 Financial and Score 1 Text are in <b>Symmetric Alignment</b> but both deep in the negative territory. This confirms that there is no reporting anomaly; management’s disclosures are transparently reflecting the severe financial erosion of the business.</li>
+            <li><b>The Path:</b> Unlike sudden macroeconomic shocks, Rite Aid illustrates a multi-year chronic decline. Both financial and qualitative trajectories drift in lockstep toward the distressed region of the latent space.</li>
+            <li><b>Aegis Signal:</b> Financial and Textual Position Scores are in <b>Symmetric Alignment</b> but located deep in negative territory. This indicates no significant reporting anomaly; executive commentary transparently reflected the ongoing financial challenges.</li>
         </ul>
         """
     },
@@ -293,25 +278,25 @@ case_guides = {
         "title": "⚡ HIGH-VELOCITY COLLAPSE: CHESAPEAKE ENERGY CORP",
         "icon": "⚡",
         "desc": """
-        <b>The Scenario:</b> The shale gas pioneer was hit by crashes in natural gas prices and a debt-fueled balance sheet that was highly unsustainable.
+        <b>The Scenario:</b> The natural gas producer was impacted by falling energy commodity prices combined with a debt-burdened balance sheet.
         <br><br>
         <b>The Trajectory Analysis:</b>
         <ul>
-            <li><b>The Path:</b> Notice the extremely high <b>Velocity (Score 2)</b> in both towers as their coordinates leap across the latent space from 2018 to 2020.</li>
-            <li><b>Aegis Signal:</b> The rapid rate of displacement (high velocity) coupled with deep negative direction indicates a sudden, unavoidable solvency crisis, culminating in a swift chapter 11 filing in June 2020.</li>
+            <li><b>The Path:</b> Note the high <b>Velocity (Score 2)</b> in both towers as their coordinates shift rapidly across the latent space from 2018 to 2020.</li>
+            <li><b>Aegis Signal:</b> The rapid velocity and downward trajectory indicate an acute liquidity and solvency crisis, culminating in a Chapter 11 filing.</li>
         </ul>
         """
     },
     "CATALENT, INC.": {
-        "title": "⚠️ EARLY WARNING SMOKE SIGNAL: CATALENT, INC.",
+        "title": "⚠️ EARLY WARNING DIVERGENCE: CATALENT, INC.",
         "icon": "⚠️",
         "desc": """
-        <b>The Scenario:</b> The pharmaceutical manufacturer struggled with operational bottlenecks and sterile syringe quality control issues at key plants producing Wegovy weight-loss drug.
+        <b>The Scenario:</b> The contract pharmaceutical manufacturer faced operational bottlenecks and quality-control constraints at key sterile manufacturing facilities.
         <br><br>
         <b>The Trajectory Analysis:</b>
         <ul>
-            <li><b>The Path:</b> In 2022, while trailing financial ratios looked stable and healthy, the qualitative narrative disclosures in filings began expressing deep risk, supply-chain delays, and quality-control bottlenecks.</li>
-            <li><b>Aegis Signal:</b> Triggered a <b>Critical Negative Divergence ("Smoke Signal")</b>. The narrative score deteriorated sharply ahead of trailing balance sheet books. This proved that alternative disclosures are leading risk indicators.</li>
+            <li><b>The Path:</b> In 2022, while traditional trailing financial ratios appeared stable and healthy, qualitative narrative disclosures began highlighting operational risks and production bottlenecks.</li>
+            <li><b>Aegis Signal:</b> Triggered a <b>Critical Negative Divergence (Smoke Signal)</b>. The narrative score deteriorated sharply ahead of trailing financial metrics, demonstrating the value of qualitative disclosures as leading indicators.</li>
         </ul>
         """
     },
@@ -319,12 +304,12 @@ case_guides = {
         "title": "🟢 SYMMETRIC ALIGNMENT (HEALTHY): NVIDIA CORP",
         "icon": "🟢",
         "desc": """
-        <b>The Scenario:</b> The sovereign leader of GPU silicon and artificial intelligence infrastructure.
+        <b>The Scenario:</b> The market leader in GPU computing and artificial intelligence infrastructure.
         <br><br>
         <b>The Trajectory Analysis:</b>
         <ul>
-            <li><b>The Path:</b> Both the Financial and Textual trajectories remain tightly clustered and nested deep within the <b>"Continent of Normalcy"</b> (the safe region).</li>
-            <li><b>Aegis Signal:</b> Shows near-perfect symmetric alignment, stable near-zero velocity, and negligible decoupling distance. The narrative and numbers reflect unparalleled operational strength and ideal reporting integrity.</li>
+            <li><b>The Path:</b> Both financial and narrative trajectories remain tightly clustered and nested deep within the <b>"Continent of Normalcy"</b> (the safe, stable region).</li>
+            <li><b>Aegis Signal:</b> Shows near-perfect symmetric alignment, stable near-zero velocity, and negligible decoupling distance, reflecting excellent operational performance and high reporting transparency.</li>
         </ul>
         """
     }
@@ -361,17 +346,25 @@ fig_seq = px.scatter(
         'Bankrupt': 'rgba(214, 39, 40, 0.6)' # transparent red
     },
     title=f"Aegis Latent Space: Aligned Dual-Trajectory of {selected_company}",
-    labels={'PCA_F1': 'Aligned Dimension 1 (PCA1)', 'PCA_F2': 'Aligned Dimension 2 (PCA2)'},
+    labels={'PCA_F1': 'Aligned Dimension 1 (PCA1)', 'PCA_F2': 'Aligned Dimension 2 (PCA2)', 'Display_Status': 'Firm Status'},
     render_mode='webgl'
 )
 
 fig_seq.update_layout(
     template="plotly_dark",
     height=600,
-    xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.05)'),
-    yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.05)'),
+    xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.05)', title_font=dict(color='#FFFFFF'), tickfont=dict(color='#E5E7EB')),
+    yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.05)', title_font=dict(color='#FFFFFF'), tickfont=dict(color='#E5E7EB')),
+    title_font=dict(color='#FFFFFF'),
     paper_bgcolor='rgba(0,0,0,0)',
-    plot_bgcolor='rgba(0,0,0,0)'
+    plot_bgcolor='rgba(0,0,0,0)',
+    legend=dict(
+        font=dict(color="#FFFFFF", size=12),
+        bgcolor="rgba(10,10,15,0.8)",
+        bordercolor="rgba(255,255,255,0.15)",
+        borderwidth=1,
+        title=dict(font=dict(color="#FFFFFF", size=13))
+    )
 )
 
 # Plot paths if we have records
@@ -399,6 +392,27 @@ if len(target_seq) > 0:
         line=dict(color='#8be9fd', width=3, dash='dash'),
         marker=dict(color='#bd93f9', size=11, symbol='diamond')
     ))
+
+# Better explain the graph with clear interactive directions
+st.markdown("""
+<div style='background-color: #11131A; border: 1px solid rgba(139, 92, 246, 0.2); padding: 18px; border-radius: 8px; margin-bottom: 20px;'>
+    <h4 style='color: #8be9fd !important; margin-top: 0; margin-bottom: 10px;'>💡 Understanding & Interacting with the Latent Space Map</h4>
+    <p style='color: #F3F4F6 !important; font-size: 1.0rem; line-height: 1.6; margin-bottom: 0;'>
+        This chart projects Aegis's high-dimensional 16D space into 2D using Principal Component Analysis (PCA). 
+        The small background dots are benchmark companies, mapping out the <b>Continent of Normalcy</b> (healthy stable firms in transparent blue) and the <b>Cliff Edge</b> (distressed firms in transparent red).
+        <br><br>
+        <b>How to Interact:</b>
+        <br>
+        • 🔍 <b>Zooming & Panning:</b> Click and drag a rectangle over any area of the plot to zoom in and examine specific coordinates. Double-click anywhere on the plot to reset the zoom view. You can also zoom with your mouse wheel or trackpad.
+        <br>
+        • 📌 <b>Isolate & Highlight Lines:</b> To highlight or hide specific lines (e.g., to focus only on the narrative or financial line), single-click the legend labels on the right (<i>Financial Trajectory (ZF)</i> or <i>Narrative Trajectory (ZT)</i>).
+        <br>
+        • ℹ️ <b>Hover Details:</b> Hover over any of the gold circles or blue diamonds to see the exact filing year, company name, and latent space coordinates.
+        <br>
+        • 🔗 <b>Identifying Decoupling Gaps:</b> The solid gold line shows the financial trajectory, and the dashed cyan line shows the narrative trajectory. When these lines separate and head in different directions, it signals cross-modal reporting anomalies and potential distress.
+    </p>
+</div>
+""", unsafe_allow_html=True)
     
 st.plotly_chart(fig_seq, use_container_width=True)
 
@@ -462,20 +476,25 @@ if len(company_aegis) > 0:
                 tickmode='array',
                 tickvals=company_aegis['Filing_Year_End'].tolist(),
                 showgrid=True,
-                gridcolor='rgba(255,255,255,0.05)'
+                gridcolor='rgba(255,255,255,0.05)',
+                title_font=dict(color='#FFFFFF'),
+                tickfont=dict(color='#E5E7EB')
             ),
             yaxis=dict(
                 title="Health Score (-1 to +1)",
                 range=[-1.05, 1.05],
                 showgrid=True,
-                gridcolor='rgba(255,255,255,0.05)'
+                gridcolor='rgba(255,255,255,0.05)',
+                title_font=dict(color='#FFFFFF'),
+                tickfont=dict(color='#E5E7EB')
             ),
             legend=dict(
                 orientation="h",
                 yanchor="bottom",
                 y=1.02,
                 xanchor="right",
-                x=1
+                x=1,
+                font=dict(color="#FFFFFF", size=11)
             ),
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
@@ -502,12 +521,16 @@ if len(company_aegis) > 0:
                 title="Filing Year",
                 tickmode='array',
                 tickvals=company_aegis['Filing_Year_End'].tolist(),
-                showgrid=False
+                showgrid=False,
+                title_font=dict(color='#FFFFFF'),
+                tickfont=dict(color='#E5E7EB')
             ),
             yaxis=dict(
                 title="Signed Divergence",
                 showgrid=True,
-                gridcolor='rgba(255,255,255,0.05)'
+                gridcolor='rgba(255,255,255,0.05)',
+                title_font=dict(color='#FFFFFF'),
+                tickfont=dict(color='#E5E7EB')
             ),
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
