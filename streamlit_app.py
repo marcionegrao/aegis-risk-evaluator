@@ -24,13 +24,40 @@ st.markdown("""
         color: #F3F4F6 !important;
     }
     
-    /* Force high contrast white for all default headings */
-    h1, h2, h3, h4, h5, h6, 
-    .stSubheader, .stHeader, 
-    [data-testid="stHeader"] h2, [data-testid="stHeader"] h3,
-    div[data-testid="stMarkdownContainer"] h1,
-    div[data-testid="stMarkdownContainer"] h2,
-    div[data-testid="stMarkdownContainer"] h3,
+    /* Elegant HR divider */
+    hr {
+        border: 0 !important;
+        height: 1px !important;
+        background: linear-gradient(to right, rgba(139, 92, 246, 0), rgba(139, 92, 246, 0.5), rgba(139, 92, 246, 0)) !important;
+        margin: 35px 0 !important;
+    }
+    
+    /* Force high contrast white for headings & reduce sizes */
+    h1, div[data-testid="stMarkdownContainer"] h1 {
+        font-size: 2.2rem !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        margin-top: 1.5rem !important;
+        margin-bottom: 1.0rem !important;
+    }
+    h2, .stSubheader, [data-testid="stHeader"] h2, div[data-testid="stMarkdownContainer"] h2 {
+        font-size: 1.5rem !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        margin-top: 1.8rem !important;
+        margin-bottom: 1.0rem !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        padding-bottom: 8px !important;
+    }
+    h3, div[data-testid="stMarkdownContainer"] h3 {
+        font-size: 1.25rem !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        margin-top: 1.2rem !important;
+        margin-bottom: 0.6rem !important;
+    }
+    h4, h5, h6, 
+    .stHeader, [data-testid="stHeader"] h3,
     div[data-testid="stMarkdownContainer"] h4,
     div[data-testid="stMarkdownContainer"] h5,
     div[data-testid="stMarkdownContainer"] h6 {
@@ -46,15 +73,15 @@ st.markdown("""
     div.stWrite, 
     div[data-testid="stText"] {
         color: #F3F4F6 !important; /* Extremely sharp contrast */
-        font-size: 1.05rem !important;
+        font-size: 1.0rem !important;
         line-height: 1.6 !important;
     }
     
-    /* Streamlit Selectbox widget labels (e.g., "Choose a High-Profile Corporate Trajectory to Plot") */
+    /* Streamlit Selectbox widget labels */
     label, [data-testid="stWidgetLabel"] p, .stSelectbox label {
         color: #FFFFFF !important;
         font-weight: 700 !important;
-        font-size: 1.1rem !important;
+        font-size: 1.0rem !important;
         letter-spacing: 0.02em !important;
         margin-bottom: 8px !important;
     }
@@ -85,16 +112,16 @@ st.markdown("""
     }
 
     .main-header {
-        font-size: 3.5rem;
+        font-size: 2.6rem !important; /* Reduced from 3.5rem */
         font-weight: 900;
         color: #FFFFFF !important;
         text-align: center;
-        margin-bottom: 0.1rem;
+        margin-bottom: 0.3rem;
         letter-spacing: 0.08em;
     }
     .sub-header {
-        font-size: 1.15rem;
-        color: #E5E7EB !important; /* High-contrast silver subhead */
+        font-size: 1.05rem !important; /* Reduced from 1.15rem */
+        color: #9CA3AF !important; /* High-contrast silver subhead */
         text-align: center;
         margin-bottom: 2.5rem;
         letter-spacing: 0.04em;
@@ -108,37 +135,39 @@ st.markdown("""
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
     .metric-value-healthy {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
         font-weight: 800;
         color: #10B981 !important; /* Premium Emerald */
         letter-spacing: -0.02em;
     }
     .metric-value-distressed {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
         font-weight: 800;
         color: #EF4444 !important; /* Vivid Crimson */
         letter-spacing: -0.02em;
     }
     .metric-value-caution {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
         font-weight: 800;
         color: #F59E0B !important; /* Warm Amber */
         letter-spacing: -0.02em;
     }
     .insight-card {
-        background-color: #11131A;
-        border: 1px solid rgba(139, 92, 246, 0.25); /* Muted purple border for tech vibe */
+        background-color: #0d0f14;
+        border: 1px solid rgba(139, 92, 246, 0.45); /* Muted purple border for tech vibe, more visible */
         padding: 20px;
         border-radius: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.08); /* High contrast purple glow */
     }
     .case-guide-card {
-        background-color: #11131A !important;
+        background-color: #0D0E12 !important;
+        border: 1px solid rgba(139, 92, 246, 0.25) !important;
         border-left: 5px solid #8B5CF6 !important;
         padding: 22px !important;
         border-radius: 8px !important;
         margin-bottom: 25px !important;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6) !important;
     }
     .case-guide-card h3 {
         color: #FFFFFF !important;
@@ -148,7 +177,7 @@ st.markdown("""
     }
     .case-guide-card p, .case-guide-card div {
         color: #F3F4F6 !important; /* Extremely high-contrast off-white */
-        font-size: 1.05rem !important;
+        font-size: 1.0rem !important;
         line-height: 1.6 !important;
     }
     .case-guide-card ul {
@@ -159,7 +188,7 @@ st.markdown("""
     .case-guide-card li {
         color: #F3F4F6 !important; /* Explicitly enforce high-contrast off-white for list items */
         margin-bottom: 8px !important;
-        font-size: 1.0rem !important;
+        font-size: 0.95rem !important;
         line-height: 1.5 !important;
     }
     .case-guide-card li b {
@@ -212,7 +241,7 @@ except Exception as e:
 
 # Title banner
 st.markdown("<div class='main-header'>AEGIS 🛡️</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-header'>A Multi-Modal, Deep Trajectory Alignment Architecture for Corporate Financial Distress Prediction</div>", unsafe_allow_html=True)
+st.markdown("<div class='sub-header'>A Multi-Modal Architecture for Corporate Financial Distress Prediction</div>", unsafe_allow_html=True)
 
 # Interactive Intro Description
 st.markdown("""
@@ -237,7 +266,8 @@ demo_cases = {
     "NVIDIA CORP (Symmetric Healthy Alignment Case)": "NVIDIA CORP"
 }
 
-st.subheader("🏢 Select Curated Case Study")
+st.markdown("---")
+st.subheader("🏢 Select Case Study")
 selected_demo_label = st.selectbox("Choose a High-Profile Corporate Trajectory to Plot", list(demo_cases.keys()))
 selected_company = demo_cases[selected_demo_label]
 
@@ -416,6 +446,7 @@ st.markdown("""
     
 st.plotly_chart(fig_seq, use_container_width=True)
 
+st.markdown("---")
 # --- DISPLAY METRICS AND THREE-SCORE ANALYSIS ---
 st.subheader(f"📊 Aegis Three-Score Diagnostics: {selected_company}")
 
@@ -706,11 +737,4 @@ if xai_data is not None and len(target_seq) > 0:
                     st.markdown(f"- **{t_name.replace('_', ' ')}** ({t_val:+.2f})")
                     st.caption(f"  *Key words:* {', '.join(top_words)}")
 
-# --- ARCHITECTURE DETAILS FOOTER ---
-st.markdown("---")
-st.subheader("🛡️ Aegis Unsupervised Dual-Tower Architecture")
-st.write("""
-This model is trained in two phases to guarantee extreme robustness without relying on synthetic defaults:
-1. **The Financial Autoencoder:** Ingests 41 financial ratios over a rolling 3-year window and compresses them to a 16-dimensional coordinate vector. It maps healthy stable firms into a dense cluster (**Continent of Normalcy**) and distressed firms onto outlier edges (**Cliff Edge**).
-2. **Contrastive LSTM Alignment:** A parallel Recurrent Neural Network (LSTM) ingests textual disclosures. It is trained via **Contrastive Alignment and Negative Sampling** to map the qualitative text vector onto the *exact same 16D coordinates* as the financial vector, using the financial space as a geometric Rosetta Stone.
-""")
+
