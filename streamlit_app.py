@@ -268,7 +268,7 @@ demo_cases = {
 
 st.markdown("---")
 st.subheader("🏢 Select Case Study")
-selected_demo_label = st.selectbox("Choose a High-Profile Corporate Trajectory to Plot", list(demo_cases.keys()))
+selected_demo_label = st.selectbox("Choose a High-Profile Corporate Trajectory to Plot", list(demo_cases.keys()), label_visibility="collapsed")
 selected_company = demo_cases[selected_demo_label]
 
 # Map Selected Company to CIK
